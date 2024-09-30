@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { appEnv } from './utils/functions';
 import { APP_PIPE } from '@nestjs/core';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
       isGlobal: true,
       envFilePath: `env/.${appEnv()}.env`,
     }),
+    PrismaModule,
   ],
   controllers: [AppController],
   providers: [AppService, { provide: APP_PIPE, useClass: ValidationPipe }],
