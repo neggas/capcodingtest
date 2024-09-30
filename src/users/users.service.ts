@@ -23,7 +23,7 @@ export class UsersService {
         },
       });
     } catch (error) {
-      new Error(error);
+      throw new Error(error);
     }
   }
 }
