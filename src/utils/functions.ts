@@ -1,4 +1,5 @@
 import { Prisma } from '@prisma/client';
+import { Request } from 'express';
 
 type AppEnvType = 'local' | 'develop' | 'production';
 
@@ -26,3 +27,10 @@ export function isDatabaseError(
 
   return false;
 }
+
+export const extractTokenFromHeader = (
+  request: Request,
+): string | undefined => {
+  const [type, token] = request.headers.authorization?.split(' ') ?? [];
+  return type === 'Bearer' ? token : undefined;
+};

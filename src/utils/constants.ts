@@ -264,3 +264,5 @@ export interface PostGresPrismaError extends PrismaClientKnownRequestError {
   clientVersion: string;
   meta: { modelName: string; target?: string[]; cause?: string };
 }
+
+export const IS_PUBLIC_KEY = 'isPublic';
