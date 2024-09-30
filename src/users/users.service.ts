@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import {
   CreateUserDto,
@@ -87,7 +91,13 @@ export class UsersService {
         },
       });
     } catch (error) {
-      throw new Error(error);
+      if (!isDatabaseError(error)) {
+        throw new Error(error);
+      }
+
+      if (error.code === PostgresErrorCode.NotFoundError) {
+        throw new NotFoundException('User not found');
+      }
     }
   }
 
@@ -101,7 +111,27 @@ export class UsersService {
         data: user,
       });
     } catch (error) {
-      throw new Error(error);
+      if (!isDatabaseError(error)) {
+        throw new Error(error);
+      }
+
+      if (error.code === PostgresErrorCode.NotFoundError) {
+        throw new NotFoundException('You try to update inexistant ressource');
+      }
+    }
+  }
+
+  async removeUser(userId: string) {
+    try {
+      return await this.prismaService.user.delete({ where: { id: userId } });
+    } catch (error) {
+      if (!isDatabaseError(error)) {
+        throw new Error(error);
+      }
+
+      if (error.code === PostgresErrorCode.NotFoundError) {
+        throw new NotFoundException('You try to delete inexistant ressource');
+      }
     }
   }
 }

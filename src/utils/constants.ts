@@ -255,10 +255,11 @@ export const CountryCode = [
 
 export enum PostgresErrorCode {
   UniqueViolation = 'P2002',
+  NotFoundError = 'P2025',
 }
 
 export interface PostGresPrismaError extends PrismaClientKnownRequestError {
   code: string;
   clientVersion: string;
-  meta: { modelName: string; target: string[] };
+  meta: { modelName: string; target?: string[]; cause?: string };
 }
