@@ -5,10 +5,11 @@ import {
   Param,
   ParseUUIDPipe,
   Post,
+  Put,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { ApiTags } from '@nestjs/swagger';
-import { CreateUserDto } from './dto/return-types.dto';
+import { CreateUserDto, UpdateUserDto } from './dto/return-types.dto';
 
 @ApiTags('User')
 @Controller('v1/users')
@@ -28,5 +29,10 @@ export class UsersController {
   @Get(':id')
   async findUser(@Param('id', ParseUUIDPipe) userId: string) {
     return this.userService.findUser(userId);
+  }
+
+  @Put('update/:id')
+  async updateUser(@Body() user: UpdateUserDto) {
+    return await this.userService.updateUser(user);
   }
 }

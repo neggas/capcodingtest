@@ -1,6 +1,10 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateUserDto, UserResponseDto } from './dto/return-types.dto';
+import {
+  CreateUserDto,
+  UpdateUserDto,
+  UserResponseDto,
+} from './dto/return-types.dto';
 import { isDatabaseError } from 'src/utils/functions';
 import { PostgresErrorCode, PostGresPrismaError } from 'src/utils/constants';
 
@@ -81,6 +85,20 @@ export class UsersService {
           phone: true,
           postcode: true,
         },
+      });
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  async updateUser(newUserData: UpdateUserDto) {
+    try {
+      const { id, ...user } = newUserData;
+      return await this.prismaService.user.update({
+        where: {
+          id,
+        },
+        data: user,
       });
     } catch (error) {
       throw new Error(error);
