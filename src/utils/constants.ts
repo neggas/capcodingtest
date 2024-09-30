@@ -1,7 +1,8 @@
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 export abstract class EnvKeys {
-  static readonly JWT_SECRET = 'JWT_SECRET';
+  static readonly JWT_SECRET =
+    'S0rs+cRRBw+//8pCQZowi/CSXgQt/qrqZTBX0b0AyN6ZQHjZ55OxeTN6Zuc3FmaK29LC6hotVdCo5trcvzinrJKWGui7HVUFFEuXilqEiKI7NvPqojbRYa/UkJdFYUAcC/1G2j9oXuWJX+QDcGM3K0MJ50g/yX1iw5gRHdYrk4uYUJOx02FRytc2JI+wiff8WvAZYrn8rGaOQw==';
   static readonly DATABASE_URL = 'DATABASE_URL';
 }
 
