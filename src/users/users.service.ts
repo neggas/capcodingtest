@@ -64,4 +64,26 @@ export class UsersService {
       }
     }
   }
+
+  async findUser(id: string) {
+    try {
+      return await this.prismaService.user.findFirstOrThrow({
+        where: { id },
+        select: {
+          id: true,
+          name: true,
+          firstname: true,
+          address: true,
+          city: true,
+          country: true,
+          createdAt: true,
+          email: true,
+          phone: true,
+          postcode: true,
+        },
+      });
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
 }
