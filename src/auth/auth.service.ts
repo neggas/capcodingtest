@@ -46,17 +46,22 @@ export class AuthService {
 
       const { password, ...user } = foundUser;
 
-      if (!bcrypt.compareSync(password, pass)) {
-        throw new UnauthorizedException();
+      if (!bcrypt.compareSync(pass, password)) {
+        return new UnauthorizedException();
       }
 
       return this.generateTokens({ userId: user.id, isAdmin: user.isAdmin });
     } catch (error) {
+      console.log(error);
       if (!isDatabaseError(error)) {
         throw new Error(error);
       }
 
       if (error.code === PostgresErrorCode.NotFoundError) {
+        throw new UnauthorizedException();
+      }
+
+      if (error instanceof UnauthorizedException) {
         throw new UnauthorizedException();
       }
     }
