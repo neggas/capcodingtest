@@ -11,6 +11,7 @@ import {
 } from './dto/return-types.dto';
 import { isDatabaseError } from 'src/utils/functions';
 import { PostgresErrorCode, PostGresPrismaError } from 'src/utils/constants';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -39,8 +40,12 @@ export class UsersService {
 
   async createUser(user: CreateUserDto): Promise<UserResponseDto> {
     try {
+      const { password, ...requiredUserData } = user;
+
+      const hash = await bcrypt.hash(password, 10);
+
       return await this.prismaService.user.create({
-        data: user,
+        data: { ...requiredUserData, password: hash },
         select: {
           address: true,
           city: true,
