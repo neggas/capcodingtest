@@ -78,7 +78,7 @@ export class UsersService {
     }
   }
 
-  async findUser(id: string) {
+  async findUser(id: string): Promise<UserResponseDto> {
     try {
       return await this.prismaService.user.findFirstOrThrow({
         where: { id },
@@ -106,7 +106,7 @@ export class UsersService {
     }
   }
 
-  async updateUser(newUserData: UpdateUserDto) {
+  async updateUser(newUserData: UpdateUserDto): Promise<UserResponseDto> {
     try {
       const { id, ...user } = newUserData;
       return await this.prismaService.user.update({
@@ -126,7 +126,7 @@ export class UsersService {
     }
   }
 
-  async removeUser(userId: string) {
+  async removeUser(userId: string): Promise<UserResponseDto> {
     try {
       return await this.prismaService.user.delete({ where: { id: userId } });
     } catch (error) {
