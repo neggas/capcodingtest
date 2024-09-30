@@ -22,6 +22,8 @@ export class UsersService {
           postcode: true,
         },
       });
-    } catch (error) {}
+    } catch (error) {
+      new Error(error);
+    }
   }
 }
