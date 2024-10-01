@@ -101,4 +101,36 @@ export class AuthService {
       }
     }
   }
+
+  async getMeUser(id: string) {
+    try {
+      return await this.prismaService.user.findUnique({
+        where: { id: id },
+        select: {
+          id: true,
+          name: true,
+          firstname: true,
+          address: true,
+          city: true,
+          country: true,
+          createdAt: true,
+          email: true,
+          phone: true,
+          postcode: true,
+        },
+      });
+    } catch (error) {
+      if (!isDatabaseError(error)) {
+        throw new Error(error);
+      }
+
+      if (error.code === PostgresErrorCode.NotFoundError) {
+        throw new UnauthorizedException();
+      }
+
+      if (error instanceof UnauthorizedException) {
+        throw new UnauthorizedException();
+      }
+    }
+  }
 }
