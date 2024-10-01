@@ -1,11 +1,16 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { PostgresErrorCode } from 'src/utils/constants';
+import { PostgresErrorCode, PostGresPrismaError } from 'src/utils/constants';
 import { appEnv, isDatabaseError } from 'src/utils/functions';
 import * as bcrypt from 'bcrypt';
 import { JwtPayload } from './types';
 import { TokenObjectDto } from './dto/tokenObject.dto';
 import { JwtService } from '@nestjs/jwt';
+import { CreateUserDto } from 'src/users/dto/return-types.dto';
 
 @Injectable()
 export class AuthService {
@@ -52,7 +57,6 @@ export class AuthService {
 
       return this.generateTokens({ userId: user.id, isAdmin: user.isAdmin });
     } catch (error) {
-      console.log(error);
       if (!isDatabaseError(error)) {
         throw new Error(error);
       }
@@ -63,6 +67,37 @@ export class AuthService {
 
       if (error instanceof UnauthorizedException) {
         throw new UnauthorizedException();
+      }
+    }
+  }
+
+  async SignUpCLient(client: CreateUserDto) {
+    try {
+      const hash = await bcrypt.hash(client.password, 10);
+
+      const creteadUser = await this.prismaService.user.create({
+        data: { ...client, password: hash },
+      });
+
+      return this.generateTokens({
+        isAdmin: creteadUser.isAdmin,
+        userId: creteadUser.id,
+      });
+    } catch (error) {
+      if (!isDatabaseError(error)) {
+        throw new Error(error);
+      }
+
+      if (error.code === PostgresErrorCode.UniqueViolation) {
+        const prismaError = error as PostGresPrismaError;
+
+        if (prismaError.meta.target.includes('login')) {
+          throw new BadRequestException('Login is used');
+        }
+
+        if (prismaError.meta.target.includes('email')) {
+          throw new BadRequestException('Email is used');
+        }
       }
     }
   }
