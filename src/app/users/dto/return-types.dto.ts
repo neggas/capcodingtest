@@ -7,7 +7,7 @@ import {
   IsString,
   IsUUID,
 } from 'class-validator';
-import { IsCountry } from 'src/validators/is-country-validators';
+import { IsCountry } from 'src/shared/validators/is-country-validators';
 
 export class UserResponseDto {
   id: string;

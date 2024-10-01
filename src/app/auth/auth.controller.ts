@@ -3,7 +3,7 @@ import { AuthService } from './auth.service';
 import { SignInDto } from './dto/signIn.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Public } from './decorators/public.decorator';
-import { CreateUserDto } from 'src/users/dto/return-types.dto';
+import { CreateUserDto } from 'src/app/users/dto/return-types.dto';
 import { CurrentUser } from './decorators/current-user.decorator';
 
 @ApiTags('Auth')

@@ -11,7 +11,7 @@ import {
 import { UsersService } from './users.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto, UpdateUserDto } from './dto/return-types.dto';
-import { Admin } from 'src/auth/decorators/admin.decorator';
+import { Admin } from 'src/app/auth/decorators/admin.decorator';
 
 @ApiTags('User')
 @ApiBearerAuth()
