@@ -9,10 +9,13 @@ import {
   Put,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto, UpdateUserDto } from './dto/return-types.dto';
+import { Admin } from 'src/auth/decorators/admin.decorator';
 
 @ApiTags('User')
+@ApiBearerAuth()
+@Admin()
 @Controller('v1/users')
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
